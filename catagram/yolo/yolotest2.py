@@ -2,7 +2,7 @@ import torch
 import cv2
 
 name =[]
-myfile = open("name.txt", "r")
+myfile = open("catagram/yolo/name.txt", "r")
 for i in myfile:
     line = str(i)
     line = line.strip('\n')
