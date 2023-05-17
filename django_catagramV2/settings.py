@@ -26,7 +26,7 @@ environ.Env.read_env()
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'django-insecure-6@qb#gd^z$$x#j2x-fzbzh+9p4-zbbvidtb61(6r1$mu)55!ch'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
