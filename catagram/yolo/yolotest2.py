@@ -2,7 +2,7 @@ import torch
 import cv2
 
 name =[]
-myfile = open("catagram\yolo\config\coco.names", "r")
+myfile = open("django_catagram/catagram/yolo/config/coco.names", "r")
 for i in myfile:
     line = str(i)
     line = line.strip('\n')
