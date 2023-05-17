@@ -2,7 +2,7 @@ import torch
 import cv2
 
 name =[]
-myfile = open("coco.names", "r")
+myfile = open("name.txt", "r")
 for i in myfile:
     line = str(i)
     line = line.strip('\n')
