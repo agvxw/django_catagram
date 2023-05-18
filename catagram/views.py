@@ -159,7 +159,7 @@ class CatDetectorAPIView(APIView):
         file = request.data['image']
         hash_file = get_file_hash(file)
         catornot = 'cat'
-        #fs = FileSystemStorage()
+        fs = FileSystemStorage()
         #filename = fs.save('cat_pic/' + hash_file + '.jpg', file)
         #uploaded_file_url = fs.url(filename)
         #print(uploaded_file_url)
