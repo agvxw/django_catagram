@@ -164,7 +164,7 @@ class CatDetectorAPIView(APIView):
         uploaded_file_url = fs.url(filename)
         #print(uploaded_file_url)
         cat_path = 'cat_pic/' + hash_file + '.jpg'
-        catorn = yolotest2.yolodetect(file)
+        catorn = yolotest2.yolodetect(request)
         if catornot == 'cat':
             return Response({'message': 'This is a cat'}, status=status.HTTP_201_CREATED)
         else:
