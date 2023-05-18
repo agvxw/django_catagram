@@ -1,7 +1,10 @@
+import json
+from django.http import JsonResponse
+import torch
 
 
-def yolodetect(image):
-    import torch
+def yolodetect(request):
+    image = request.FILES.get('image')
     name =[]
     myfile = open("catagram/yolo/name.txt", "r")
     for i in myfile:
