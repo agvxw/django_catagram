@@ -37,6 +37,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import jwt
 
+import torch
+
 from django.forms.models import model_to_dict
 #from .jwt_fuc import create_jwt, verify_jwt
 
