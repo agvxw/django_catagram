@@ -1,8 +1,4 @@
 import torch
-import cv2
-
-def yolodetect(image):
-    return 'cat'
 
 def yolodetect2(image):
     name =[]
@@ -14,8 +10,6 @@ def yolodetect2(image):
 # โหลดโมเดล YOLOv7
     model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
 
-# โหลดภาพที่ต้องการตรวจจับ
-    image = cv2.imread(image)
 
 # ทำการตรวจจับวัตถุและวาดกรอบสี่เหลี่ยมรอบวัตถุที่ตรวจพบบนภาพ
     results = model(image)
