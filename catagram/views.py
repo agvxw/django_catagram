@@ -158,9 +158,10 @@ class CatDetectorAPIView(APIView):
     def post(self, request):
         file = request.data['image']
         hash_file = get_file_hash(file)
-        fs = FileSystemStorage()
-        filename = fs.save('cat_pic/' + hash_file + '.jpg', file)
-        uploaded_file_url = fs.url(filename)
+        catornot = 'cat'
+        #fs = FileSystemStorage()
+        #filename = fs.save('cat_pic/' + hash_file + '.jpg', file)
+        #uploaded_file_url = fs.url(filename)
         print(uploaded_file_url)
         #cat_path = 'cat_pic/' + hash_file + '.jpg'
         #catornot = yolotest2.yolodetect(cat_path)
