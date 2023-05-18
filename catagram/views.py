@@ -163,12 +163,12 @@ class CatDetectorAPIView(APIView):
         filename = fs.save('cat_pic/' + hash_file + '.jpg', file)
         uploaded_file_url = fs.url(filename)
         #print(uploaded_file_url)
-        #cat_path = 'cat_pic/' + hash_file + '.jpg'
-        #catornot = yolotest2.yolodetect(cat_path)
+        cat_path = 'cat_pic/' + hash_file + '.jpg'
+        catornot = yolotest2.yolodetect(cat_path)
         if catornot == 'cat':
             return Response({'message': 'This is a cat'}, status=status.HTTP_201_CREATED)
-        #else:
-            #return Response({'error': 'This picture is not a cat, please change!'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error': 'This picture is not a cat, please change!'}, status=status.HTTP_400_BAD_REQUEST)
 
 class PostApi(APIView):
     parser_classes = [MultiPartParser]
