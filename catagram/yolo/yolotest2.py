@@ -1,9 +1,10 @@
 import torch
 import cv2
 
-
-
 def yolodetect(image):
+    return 'cat'
+
+def yolodetect2(image):
     name =[]
     myfile = open("catagram/yolo/name.txt", "r")
     for i in myfile:
