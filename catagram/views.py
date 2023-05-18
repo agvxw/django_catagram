@@ -169,7 +169,7 @@ class CatDetectorAPIView(APIView):
         cat_path = 'cat_pic/' + hash_file + '.jpg'
         #catorn = yolotest2.yolodetect(request)
         image = request.FILES.get('image')
-        model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True ,trust_repo=True)
+        model = torch.hub.load('ultralytics/yolov5', 'custom', path= 'yolov5s.pt', pretrained=True ,trust_repo=True)
         results = model(cat_path)
         if catornot == 'cat':
             return Response({'message': 'This is a cat'}, status=status.HTTP_201_CREATED)
