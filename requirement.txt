@@ -31,7 +31,6 @@ GitPython==3.1.31
 google-auth==2.18.0
 google-auth-oauthlib==1.0.0
 grpcio==1.54.2
-ultralytics-yolov5
 huggingface-hub==0.14.1
 idna==2.10
 inflection==0.5.1
