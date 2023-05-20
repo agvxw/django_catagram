@@ -4,7 +4,7 @@ ca =[]
 #ca2 =[]
 catmodel=['catjump','catrun','catsit','catsleep']
 # Model
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='catagram/yolo/config/best.pt', pretrained=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path ='catagram/yolo/config/best.pt', pretrained=True)
 
 # Image
 #img = r'C:\Users\MiniDragon\Documents\test\cat6.jpg'
