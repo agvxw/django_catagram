@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-6@qb#gd^z$$x#j2x-fzbzh+9p4-zbbvidtb61(6r1$mu)55!ch
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -100,7 +100,7 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(),
+    'default': dj_database_url.parse(env('DATABASE_URL'))
 }
 
 
