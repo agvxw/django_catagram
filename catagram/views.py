@@ -17,7 +17,7 @@ from rest_framework import permissions
 
 from .serializers import PostSerializer
 from .yolo import yolotest2 
-#from .yolo import testyolov5
+from .yolo import testyolov5
 from .models import *
 from .serializers import *
 # from catagram.utils.image_utils import cat_detec_path
@@ -182,7 +182,7 @@ class CatDetectorAPIView(APIView):
         print(uploaded_file_url)
         cat_path = 'cat_pic/' + hash_file + '.jpg'
         catornot = yolotest2.yolodetect(cat_path)
-        #typcat = testyolov5.modelcat(cat_path)
+        typcat = testyolov5.modelcat(cat_path)
         if catornot == 'cat':
             delete_file(cat_path)
             return Response({'message': 'This is a cat', 'type' : typcat}, status=status.HTTP_201_CREATED)
