@@ -4,7 +4,7 @@ import torch
 
 
 def yolodetect(request):
-    image = request.FILES.get('image')
+    image = request
     name =[]
     myfile = open("catagram/yolo/name.txt", "r")
     for i in myfile:
