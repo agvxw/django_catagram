@@ -16,8 +16,8 @@ from rest_framework_simplejwt.tokens import OutstandingToken
 from rest_framework import permissions
 
 from .serializers import PostSerializer
-from .yolo import yolotest2
-
+from .yolo import yolotest2 
+from .yolo import testyolov5
 from .models import *
 from .serializers import *
 # from catagram.utils.image_utils import cat_detec_path
@@ -36,8 +36,6 @@ from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 import json
 import jwt
-
-import torch
 
 from django.forms.models import model_to_dict
 #from .jwt_fuc import create_jwt, verify_jwt
@@ -63,23 +61,33 @@ class UserCreateAPIView(APIView):
         email = request.data.get('email')
         username = request.data.get('username')
         password = request.data.get('password')
+
+        # Check if username or email already exist
+        if UserProfile.objects.filter(username=username).exists():
+            return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        if UserProfile.objects.filter(email=email).exists():
+            return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create a new user
         user = UserProfile.objects.create_user(email=email, username=username, password=password)
         user.save()
         return Response({'success': 'user created'},status=status.HTTP_201_CREATED)
 
-    def get(self, request):
+    def get(self, request, *args, **kwarqs):
+        # Get user by id
         user_id = request.GET.get('user_id')
         if user_id is not None:
-            # Get user by id
+            # user id
             try:
                 user = UserProfile.objects.filter(id=int(user_id)).values()
                 data = {'user': list(user)[0]}
             except (UserProfile.DoesNotExist, ValueError):
                 data = {'error': f'User with id={user_id} does not exist'}
         else:
-            # Get all users
-            users = UserProfile.objects.all()
-            data = {'users': list(users.values())}
+            # id (from access token)
+            user_id = request.user.id
+            user = UserProfile.objects.filter(id=int(user_id)).values()
+            data = {'users': list(user)[0]}
 
         return JsonResponse(data)
 
@@ -94,13 +102,18 @@ class LoginApi(APIView):
         }
     )
     def post(self, request, *args, **kwargs):
-        serializer = TokenObtainPairSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        refresh = RefreshToken.for_user(serializer.user)
-        return Response({
-            'access_token': str(serializer.validated_data['access']),
-            'refresh_token': str(refresh),
-        })
+        # Get access token
+        try: 
+            serializer = TokenObtainPairSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            refresh = RefreshToken.for_user(serializer.user)
+            return Response({
+                'access_token': str(serializer.validated_data['access']),
+                'refresh_token': str(refresh),
+            })
+        except Exception as e:
+            print(e)
+            return Response(status=400, data={"error": "Invalid email or password"}) 
 
 class LogoutApi(TokenViewBase):
     permission_classes = (permissions.AllowAny,)
@@ -150,33 +163,37 @@ class TokenRefresh(APIView):
         return Response({'access_token': access_token}, status=status.HTTP_200_OK)
 
 def delete_file(filepath):
+    # Delete file
     if os.path.exists(filepath):
         os.remove(filepath)
 
-
-
 class CatDetectorAPIView(APIView):
+    """
+    Cat detector API
+    Check if this is a picture of a cat or not.
+    """
     authentication_classes = [JWTAuthentication]
     def post(self, request):
         file = request.data['image']
         hash_file = get_file_hash(file)
-        catornot = 'cat'
         fs = FileSystemStorage()
         filename = fs.save('cat_pic/' + hash_file + '.jpg', file)
-        
         uploaded_file_url = fs.url(filename)
-        #print(uploaded_file_url)
+        print(uploaded_file_url)
         cat_path = 'cat_pic/' + hash_file + '.jpg'
-        #catorn = yolotest2.yolodetect(request)
-        image = request.FILES.get('image')
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path= 'yolov5s.pt', pretrained=True ,trust_repo=True)
-        results = model(cat_path)
+        catornot = yolotest2.yolodetect(cat_path)
+        typcat = testyolov5.modelcat(cat_path)
         if catornot == 'cat':
-            return Response({'message': 'This is a cat'}, status=status.HTTP_201_CREATED)
+            delete_file(cat_path)
+            return Response({'message': 'This is a cat', 'type' : typcat}, status=status.HTTP_201_CREATED)
         else:
+            delete_file(cat_path)
             return Response({'error': 'This picture is not a cat, please change!'}, status=status.HTTP_400_BAD_REQUEST)
-
+    
 class PostApi(APIView):
+    """
+    Post cat picture API
+    """
     parser_classes = [MultiPartParser]
     serializer_class = PostSerializer
 
@@ -187,8 +204,8 @@ class PostApi(APIView):
         },
     )
     def post(self, request, *args, **kwargs):
+        # Create a new post
         user = request.user
-        print(user.id)
         catpic = CatPics.objects.create_catpic(
             title=get_file_hash(request.data['image']),
             image=request.data['image']
@@ -202,11 +219,10 @@ class PostApi(APIView):
         return Response({'message':'is a cat. Created post success'},status=status.HTTP_201_CREATED)
 
     def get(self, request, *args, **kwargs):
-        # Get all post
         user_id = request.GET.get('user_id')
         post_id = request.GET.get('post_id')
         if (post_id is not None) or (user_id is not None):
-            print(post_id,user_id)
+            # Get all post
             if (user_id is not None) and (post_id is None):
                 # Get post by user_id
                 try:
@@ -228,20 +244,15 @@ class PostApi(APIView):
                 except Post.DoesNotExist:
                     data = {'error': f'User with id={post_id} does not exist'}
         else:
-            print(user_id,post_id)
             all_post = Post.objects.all()
             data = {'post': list(all_post.values())}
         
         return JsonResponse(data)
-
-class AutoCaption(APIView):
-    def post(self, request, *args, **kwargs):
-        pass
-
-    def get():
-        pass
-
+    
 class CommentApi(APIView):
+    """
+    Comment on a post API
+    """
     serializer_class = CommentSerializer
 
     @extend_schema(
@@ -251,6 +262,7 @@ class CommentApi(APIView):
         },
     )
     def post(self, request, *args, **kwargs):
+        # Create a new comment
         try:
             user = request.user
             CommentPost.objects.create(
@@ -264,6 +276,7 @@ class CommentApi(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
     def get(self, request):
+        # Get all comment
         post_id = request.GET.get('post_id')
         try:
             comments = CommentPost.objects.filter(post_id=post_id)
@@ -314,6 +327,9 @@ def get_user_by_uid(user_id):
     return user
 
 class ProfilePage(APIView):
+    """
+    Profile page API
+    """
     serializer_class = ProfilePageSerializer
     @extend_schema(
         request=ProfilePageSerializer,
@@ -323,15 +339,43 @@ class ProfilePage(APIView):
             },
     )
     def get(self, request, *args, **kwargs):
-        user = request.user
-        post = get_post_by_uid(user.id)
-        data = {'user': list(user.values()),
-                'post': list(post.values())}
+        user_id = request.user.id
+        user = get_user_by_uid(user_id)
+        posts = get_post_by_uid(user_id)
+        data = {'user': list(user.values()), 'posts': []}
+
+        for post in posts:
+            catpic = CatPics.objects.get(id=post.catpic_id)
+            post_data = {
+                'id': post.id,
+                'caption': post.caption,
+                'p_time': post.p_time,
+                'pic': catpic.image.url if catpic else None,
+            }
+            data['posts'].append(post_data)
         return JsonResponse(data)
 
+    def post(self, request, *args, **kwargs):
+        # Edit user profile
+        pass
+
 class HomePage(APIView):
+    """
+    Home page API
+    """
     def get(self, request):
         post = Post.objects.all()
-        comment = get_comment_by_pid(post.id)
+        catpic = CatPics.objects.all()
+        data = {'post': list(post.values()),
+                'catpic': list(catpic.values())}
+        return JsonResponse(data)
+    
+class Viewpost(APIView):
+    """
+    View post API
+    """
+    def get(self, request, *args, **kwargs):
+        post_id = request.GET.get('post_id')
+        post = Post.objects.filter(id=post_id)
         data = {'post': list(post.values())}
         return JsonResponse(data)
