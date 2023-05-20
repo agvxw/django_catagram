@@ -15,23 +15,23 @@ import dj_database_url
 from datetime import timedelta
 import environ
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
+
 environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6@qb#gd^z$$x#j2x-fzbzh+9p4-zbbvidtb61(6r1$mu)55!ch'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -43,13 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'catagram',
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular',
     'drf_spectacular_sidecar',
-    'rest_framework_simplejwt.token_blacklist',
-    'corsheaders',
-    'catagram',
+    'rest_framework_simplejwt.token_blacklist'
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -62,7 +61,6 @@ SPECTACULAR_SETTINGS = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -173,8 +171,3 @@ LOGGING = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost:8000",
-    "https://dev-catagram.app",
-    "https://catagram.app",
-]
