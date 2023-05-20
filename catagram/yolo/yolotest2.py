@@ -12,7 +12,7 @@ def yolodetect(request):
         line = line.strip('\n')
         name.append(line)
 # โหลดโมเดล YOLOv7
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, , trust_repo=True)
 
 
 # ทำการตรวจจับวัตถุและวาดกรอบสี่เหลี่ยมรอบวัตถุที่ตรวจพบบนภาพ
