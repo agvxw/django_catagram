@@ -1,0 +1,15 @@
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /api/schema/swagger-ui HTTP/1.1" 301 0
+"GET /api/schema/swagger-ui/ HTTP/1.1" 200 4246
+"GET /static/drf_spectacular_sidecar/swagger-ui-dist/swagger-ui.css HTTP/1.1" 200 145206
+"GET /static/drf_spectacular_sidecar/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 200 322863
+"GET /static/drf_spectacular_sidecar/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 200 1045708
+"GET /static/drf_spectacular_sidecar/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 200 628
+"GET /api/schema/ HTTP/1.1" 200 24558
+"POST /user/ HTTP/1.1" 201 26
+Watching for file changes with StatReloader
+Not Found: //detector/
+"POST //detector/ HTTP/1.1" 404 4890
+"POST /detector/ HTTP/1.1" 201 27
+"GET /api/schema/ HTTP/1.1" 200 24558
