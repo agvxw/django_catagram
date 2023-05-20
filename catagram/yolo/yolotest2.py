@@ -2,11 +2,8 @@ import torch
 import cv2
 
 def yolodetect(image):
-    return 'cat'
-
-def yolodetect2(image):
     name =[]
-    myfile = open("catagram/yolo/name.txt", "r")
+    myfile = open("catagram\yolo\config\coco.names", "r")
     for i in myfile:
         line = str(i)
         line = line.strip('\n')
