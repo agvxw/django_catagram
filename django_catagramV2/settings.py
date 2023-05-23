@@ -176,4 +176,5 @@ CORS_ALLOWED_ORIGINS = [
     "https://localhost:8000",
     "https://dev-catagram.app",
     "https://catagram.app",
+    "www.catagram.app",
 ]
